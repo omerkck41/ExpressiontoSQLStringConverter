@@ -6,25 +6,32 @@ namespace OmerkckEF
 {
 	public class BisExpression : ExpressionVisitor
     {
+        // BinaryExpression türündeki ifadeleri ziyaret eder.
         protected override Expression VisitBinary(BinaryExpression b)
         {
             return base.VisitBinary(b);
         }
 
+        // ConstantExpression türündeki ifadeleri ziyaret eder.
         protected override Expression VisitConstant(ConstantExpression c)
         {
             return base.VisitConstant(c);
         }
 
+        // UnaryExpression türündeki ifadeleri ziyaret eder.
         protected override Expression VisitUnary(UnaryExpression u)
         {
             return base.VisitUnary(u);
         }
 
+        // MemberExpression türündeki ifadeleri ziyaret eder.
+        // Eğer ifade bir sabit ifadesi (ConstantExpression) içeriyorsa, sabit değeri çıkartır.
         protected override Expression VisitMember(MemberExpression m)
         {
+            // İç ifadeyi ziyaret eder.
             var expression = Visit(m.Expression);
 
+            // Eğer iç ifade ConstantExpression türündeyse, sabit değeri çıkartır.
             if (expression is ConstantExpression consExp)
             {
                 object container = consExp.Value;
@@ -46,11 +53,13 @@ namespace OmerkckEF
             return base.VisitMember(m);
         }
 
+        // Verilen ifadenin üzerinde değişiklikler yapar.
 		public Expression ModifyExpression(Expression exp)
         {
             return Visit(exp);
         }
-
+	
+		// Verilen ifadeyi string formatına çevirir.
 		public static string ConvertExpressionToString(Expression expression)
         {
             if (typeof(BinaryExpression).IsAssignableFrom(expression.GetType()))
@@ -174,6 +183,7 @@ namespace OmerkckEF
 
 	public static class ExpressionExtensions
 	{
+		// Extension metodu. Verilen lambda ifadesini string formatına çevirir.
 		public static string ConvertExpressionToQueryString<T>(this Expression<Func<T, bool>> ReceivedExp)
 		{
 			BisExpression expVisitor = new BisExpression();
