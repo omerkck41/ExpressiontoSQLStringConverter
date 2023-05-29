@@ -19,7 +19,6 @@ C# projesi, LINQ Expression'larını SQL sorgu dizesine dönüştürmeyi sağlay
 ExpressionExtensions sınıfını kullanmak için aşağıdaki örneği inceleyin:
 
 Expression<Func<MyType, bool>> myExpression = x => x.MyProperty == "MyValue";
-string sqlQueryString = myExpression.ConvertExpressionToQueryString();
 
 Bu örnekte, myExpression adlı ifadenin SQL sorgu dizesini oluşturduk ve sqlQueryString değişkenine atadık.
 
